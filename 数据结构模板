@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef struct ArcNode{         //边结点的定义
+    int adjvex;                //该点指向的邻边下标
+    struct ArcNode *nextarc;   //下一条边
+    int info;                  //这条边附带的信息
+}ArcNode;
+typedef struct VNode{         //表结点的定义
+    char data;               //表结点的信息
+    ArcNode *firstarc;          //结点的第一条边
+}VNode,AdjList[50];          //数组使用
+typedef struct {
+    int vexnum,arcnum;      //顶点数和边数
+    AdjList vertices;        //一个存储顶点的数组
+}ALGraph;
+
+int main()
+{
+    ALGraph G;
+    G.vexnum = 5;G.arcnum = 5;
+    G.vertices[1].data = 'b';
+    ArcNode *p = G.vertices[1].firstarc;
+    p->adjvex = 4;
+}
+int LocateVex(ALGraph &G,char v){
+    int s = 0;
+    for (int i = 0; i < G.vexnum; ++i)
+    {
+        if (G.vertices[i].data == v)
+            s = i;
+    }
+    return s;
+}
+void CreatUDG(ALGraph &G){
+    cin>>G.vexnum>>G.arcnum;
+    for (int i = 0; i < G.vexnum; ++i)
+    {
+        cin>>G.vertices[i].data;
+        G.vertices[i].firstarc = nullptr;
+    }
+    for (int k = 0; k < G.arcnum; ++k)   //创建无向网
+    {
+        char v1,v2;   //两个顶点的信息
+        int i,j;      //记录两个顶点的位置
+        cin>>v1>>v2;
+        i = LocateVex(G, v1);
+        j = LocateVex(G, v2);
+        ArcNode *p1 = new ArcNode;
+        p1->adjvex = j;
+        p1->nextarc = G.vertices[i].firstarc;   //头插法
+        G.vertices[i].firstarc = p1;
+        ArcNode *p2 = new ArcNode ;
+        p2->adjvex = i;
+        p2->nextarc = G.vertices[j].firstarc;
+        G.vertices[j].firstarc = p2;
+    }
+}
