@@ -1,5 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
+//邻接矩阵
+typedef struct {
+    int vexnum,arcnum;  //顶点数 边数
+    int vexs[50];      //顶点表
+    int arc[50][50]; //邻接矩阵
+}AMGraph;
+
+
+//邻接表
 typedef struct ArcNode{         //边结点的定义
     int adjvex;                //该点指向的邻边下标
     struct ArcNode *nextarc;   //下一条边
@@ -53,5 +62,16 @@ void CreatUDG(ALGraph &G){
         p2->adjvex = i;
         p2->nextarc = G.vertices[j].firstarc;
         G.vertices[j].firstarc = p2;
+    }
+}
+//邻接矩阵深度搜索
+void DFS(AMGraph G,int v){
+    static int visited[20];
+    cout<<v;
+    visited[v] = true;
+    for (int i = 0; i < G.vexnum; ++i)
+    {
+        if (G.arc[v][i]!=0 && !visited[i])
+            DFS(G,i);
     }
 }
